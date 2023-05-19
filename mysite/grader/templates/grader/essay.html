@@ -1,21 +1,54 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item active"><a href="{% url 'index' %}">Home</a></li>
   <li class="breadcrumb-item active"><a href="{% url 'question' essay.question.set %}">Question {{ essay.question.set }}</a></li>
   <li class="breadcrumb-item active">Essay</li>
 {% endblock %}
-{% block content %}
-    <div class="jumbotron">
-        <h1 class="display-4">Grade {{ essay.score }}</h1>
-        <p class="lead">Congratulations! Maximum Possible Score on this question is {{ essay.question.max_score }}</p>
-        <hr class="my-4">
-        <p>Your essay is graded by the magical power of neural networks.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-    </div>
 
-    <div class="container">
+{% block content %}
+<div class="jumbotron" style="background-color: #b5dcdc;">
+    <h1 class="display-4">Grade: {{ essay.score }}</h1>
+    <p class="lead">Congratulations! The maximum possible score on this question is {{ essay.question.max_score }}</p>
+    <hr class="my-4">
+    <p>Your essay has been graded using the power of neural networks.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'essay_detail' question_id=essay.question.id essay_id=essay.id %}" role="button">Learn More</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
             <h2 class="display-4">Your Submission</h2>
-            <p class="text-justify">{{ essay.content }}</p>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text text-justify">{{ essay.content }}</p>
+                </div>
+            </div>
         </div>
-{% endblock %}  
+    </div>
+</div>
+
+<!-- Add Bootstrap and custom JavaScript -->
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+// Custom JavaScript code for interactivity
+// You can add your own custom JavaScript code here
+// For example, handling form submissions or adding dynamic behavior
+
+// Example code: Show an alert when the "Learn More" button is clicked
+$(document).ready(function() {
+    $('a.btn').on('click', function(e) {
+        e.preventDefault();
+        alert("You clicked the Learn More button!");
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}
+
+<style>
+
+</style>

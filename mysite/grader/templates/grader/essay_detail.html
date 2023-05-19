@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item active"><a href="{% url 'index' %}">Home</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'question' question.id %}">Question {{ question.set }}</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'essay' question_id=question_id essay_id=essay.id %}">Essay</a></li>
+  <li class="breadcrumb-item active">Learn more</li>
+{% endblock %}
+{% block content %}
+
+
+<div class="container">
+    <h2 class="display-4">Your Submission</h2>
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">{{ essay.content }}</p>
+        </div>
+    </div>
+
+    <h2 class="mt-5">Essay Details</h2>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <h4>Raw Essay Score: {{ essay_score }}</h4>
+            <h4>Keyword-based Score: {{ keyword_based_score }}</h4>
+            <h4>Number of Redundancies: {{ redundancies }}</h4>
+        </div>
+        <div class="col-md-6">
+            <h4>Grammatical Errors: {{ grammatical_errors }}</h4>
+            <h4>Spelling Errors: {{ spelling_errors }}</h4>
+            <h4>Length of Essay: {{ essay_length }}</h4>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h4>Feedback</h4>
+            {% if essay_length < 200 %}
+            <div class="card feedback-card short-essay alert alert-danger">
+                <div class="card-body">
+                    <p class="card-text"><b>Essay is quite short and too concise.</b></p>
+                </div>
+            </div>
+            {% elif essay_length >= 200 and essay_length < 500 %}
+            <div class="card feedback-card balanced-essay alert alert-success">
+                <div class="card-body">
+                    <p class="card-text"><b>The essay is a perfect balance of brevity and expression.</b></p>
+                </div>
+            </div>
+            {% else %}
+            <div class="card feedback-card long-essay feedback alert alert-warning">
+                <div class="card-body">
+                    <p class="card-text"><b>The essay is too long.</b></p>
+                </div>
+            </div>
+            {% endif %}
+            {% if keyword_based_score < 5 %}
+            <div class="card feedback-card irrelevant-essay feedback alert alert-danger">
+                <div class="card-body">
+                    <p class="card-text"><b>The essay needs to be relevant to the question asked.</b></p>
+                </div>
+            </div>
+            {% elif keyword_based_score >= 5 and keyword_based_score < 8 %}
+            <div class="card feedback-card incomplete-essay alert alert-warning">
+                <div class="card-body">
+                    <p class="card-text"><b>Essay is relevant but does not cover all necessary topics.</b></p>
+                </div>
+            </div>
+            {% else %}
+            <div class="card feedback-card complete-essay alert alert-success">
+                <div class="card-body">
+                    <p class="card-text"><b>The essay covers all necessary topics.</b></p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+    <script>
+    // Add event listener to feedback paragraphs for click interaction
+    const feedbackParagraphs = document.querySelectorAll('.feedback-card');
+    feedbackParagraphs.forEach((paragraph) => {
+        paragraph.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+
+    </script>
+    <style>
+   .feedback-card {
+        margin-bottom: 10px;
+    }
+
+    .short-essay {
+        border: 2px solid red;
+        background-color: #ffe6e6;
+    }
+
+    .balanced-essay {
+        border: 2px solid orange;
+        background-color: #fff3e6;
+    }
+
+    .long-essay {
+        border: 2px solid green;
+        background-color: #e6ffe6;
+    }
+
+    .irrelevant-essay {
+        border: 2px solid red;
+        background-color: #ffe6e6;
+    }
+
+    .incomplete-essay {
+        border: 2px solid orange;
+        background-color: #fff3e6;
+    }
+
+    .complete-essay {
+        border: 2px solid green;
+        background-color: #e6ffe6;
+    }
+    .feedback-card.active {
+        background-color: lightgray;
+        cursor: pointer;
+    }
+    </style>
+{% endblock %}
+

@@ -13,10 +13,18 @@
           </div>
         {% endfor %}
       {% else %}
-        {% render_field field class="form-control is-valid" %}
+        {% if field|field_type != 'file' %}
+          {% render_field field class="form-control is-valid" %}
+        {% else %}
+          {% render_field field input_type="file" class="form-control-file is-valid" %}
+        {% endif %}
       {% endif %}
     {% else %}
-      {% render_field field class="form-control" %}
+      {% if field|field_type != 'file' %}
+        {% render_field field class="form-control" %}
+      {% else %}
+        {% render_field field input_type="file" class="form-control-file" %}
+      {% endif %}
     {% endif %}
 
     {% if field.help_text %}
